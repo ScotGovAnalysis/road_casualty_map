@@ -2,7 +2,6 @@
 ## Alice's function to convert easting, northing to longtude and latitude
 # adapted from https://github.com/DataScienceScotland/school-information-dashboard/blob/main/functions/lat_long.R
 
-library(sf)
 
 convert_coordinates <- function(easting, northing, return) {
   
