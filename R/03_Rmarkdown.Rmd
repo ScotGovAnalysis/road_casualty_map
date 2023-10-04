@@ -18,10 +18,9 @@ output:
 ```{r setup, include=FALSE}
 library(flexdashboard)
 library(here)
-library(kableExtra)
-library(tidyverse)
-source(here("R", "initial_function.R"))
-source(here("R", "serious_fatal_map.R"))
+source(here("R", "00_setup_environment.R"))
+source(here("R", "01_initial_function.R"))
+source(here("R", "02_map.R"))
 
 ```
 
