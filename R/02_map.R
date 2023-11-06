@@ -106,7 +106,7 @@ iconsother <- awesomeIcons(
   markerColor = getColor(other)
 )
 
-roaduser2022 <- leaflet()  %>% 
+roaduser <- leaflet()  %>% 
   addTiles() %>% 
   addAwesomeMarkers(data = ped, group = "Pedestrians", label = ~severity, icon = iconsped, clusterOptions = markerClusterOptions(freezeAtZoom = 15)) %>% 
   addAwesomeMarkers(data = cyc, group = "Pedal cyclists", label = ~severity, icon = iconscyc, clusterOptions = markerClusterOptions(freezeAtZoom = 15)) %>% 
@@ -199,7 +199,7 @@ iconsotherf <- awesomeIcons(
 #   addAwesomeMarkers(label = ~road_user, icon = custom_icons[road_user], 
 #                     clusterOptions = markerClusterOptions(freezeAtZoom = 15))
 
-fatalities2022 <-leaflet()  %>% 
+fatalities <-leaflet()  %>% 
   addTiles() %>% 
   addAwesomeMarkers(data = fatalities_ped, group = "Pedestrians", label = ~road_user, icon = iconspedf, clusterOptions = markerClusterOptions(freezeAtZoom = 15)) %>% 
   addAwesomeMarkers(data = fatalities_cyc, group = "Pedal cyclists", label = ~road_user, icon = iconscycf, clusterOptions = markerClusterOptions(freezeAtZoom = 15)) %>% 

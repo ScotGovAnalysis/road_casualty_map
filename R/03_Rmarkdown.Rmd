@@ -24,15 +24,15 @@ source(here("R", "02_map.R"))
 
 ```
 
-2022 fatalities
+`r mapyear` fatalities
 =======================================================================
 ```{r}
-fatalities2022
+fatalities
 ```
 
-2022 fatalities and serious injuries 
+`r mapyear` fatalities and serious injuries 
 =======================================================================
 
 ```{r}
-roaduser2022
+roaduser
 ```
