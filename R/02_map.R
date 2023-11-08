@@ -1,16 +1,10 @@
 ### this script creates a leaflet map of fatal and serious casualties based on the mode of the road user
 
 
-library(here)
-library(leaflet)
-library(rgdal)  
-library(geojsonio)
-library(tidyverse)
+## get LA boundaries and names 
 
-
-source(here("R", "convert_coordinates.R"))
-
-library(jsonlite)
+# create sf polygon layer from geojson for Local Authority for fatalities
+# code from Tom Wilson
 
 geojson <- readLines("https://martinjc.github.io/UK-GeoJSON/json/sco/topo_lad.json", warn = FALSE) %>%
   paste(collapse = "\n") %>%
@@ -23,8 +17,6 @@ geojson$style = list(
   fill = FALSE
 )
 
-# create sf polygon layer from geojson ------------------------------------
-
 
 request <- "https://martinjc.github.io/UK-GeoJSON/json/sco/topo_lad.json"
 
@@ -34,17 +26,16 @@ httr::GET(url = request, httr::write_disk(file))
 
 la_boundaries <- read_sf(file)
 
+# Create centroid layer for different LA 
+# code from Tom Wilson
 
-
-# Create centroid layer
 la_xy <- st_centroid(st_geometry(la_boundaries)) %>%
   st_coordinates() %>%
   as_tibble() %>%
   cbind(la_boundaries$LAD13NM) %>%
   setNames(c("longitude", "latitude", "la_name"))
 
-
-
+## this function creates different colours for different severities
 
 getColor <- function(casualty) {
   sapply(casualty$CASSEV, function(CASSEV) {
@@ -56,6 +47,11 @@ getColor <- function(casualty) {
       "grey"
     } })
 }
+
+
+## get a map for fatalities and seriously injured
+
+# adding icons to different mode of users
 
 iconsped <- awesomeIcons(
   icon = "ion-android-walk",
@@ -106,6 +102,8 @@ iconsother <- awesomeIcons(
   markerColor = getColor(other)
 )
 
+#creating leaflet map
+
 roaduser <- leaflet()  %>% 
   addTiles() %>% 
   addAwesomeMarkers(data = ped, group = "Pedestrians", label = ~severity, icon = iconsped, clusterOptions = markerClusterOptions(freezeAtZoom = 15)) %>% 
@@ -115,19 +113,6 @@ roaduser <- leaflet()  %>%
   addAwesomeMarkers(data = bus, group = "Bus, Coach, Minibus", label = ~severity, icon = iconsbus, clusterOptions = markerClusterOptions(freezeAtZoom = 15)) %>% 
   addAwesomeMarkers(data = lor, group = "LGV and HGV", label = ~severity, icon = iconslor, clusterOptions = markerClusterOptions(freezeAtZoom = 15)) %>% 
   addAwesomeMarkers(data = other, group = "Other", label = ~severity, icon = iconsother, clusterOptions = markerClusterOptions(freezeAtZoom = 15)) %>% 
-  # addTopoJSON(geojson) %>% 
-  # addLabelOnlyMarkers(
-  #   data = la_xy,
-  #   lng = ~longitude,
-  #   lat = ~latitude,
-  #   label = ~la_name,
-  #   labelOptions = labelOptions(
-  #     noHide = TRUE,
-  #     textOnly = TRUE,
-  #     style = list(
-  #       "color" = "#1E22AA",
-#       "font-size" = "16px" 
-#     ))) %>% 
   # Layers control
   addLayersControl(
   overlayGroups = c("Pedestrians", "Pedal cyclists", "Motorcyclists", 
@@ -138,8 +123,11 @@ roaduser <- leaflet()  %>%
             "Cars and taxis", "Bus, Coach, Minibus", "LGV and HGV", 
             "Other"))
 
-### fatalities only map
 
+
+## fatalities only map
+
+# adding icons to different mode of users
 
 iconspedf <- awesomeIcons(
   icon = "ion-android-walk",
@@ -190,14 +178,7 @@ iconsotherf <- awesomeIcons(
   markerColor = "red"
 )
 
-# custom_icons <- awesomeIconList('Pedestrian' = iconspedf, 
-#                                 'Pedal cycle' = iconscycf
-#                                 )
-# 
-# leaflet(fatals)  %>% 
-#   addTiles() %>% 
-#   addAwesomeMarkers(label = ~road_user, icon = custom_icons[road_user], 
-#                     clusterOptions = markerClusterOptions(freezeAtZoom = 15))
+#creating leaflet map
 
 fatalities <-leaflet()  %>% 
   addTiles() %>% 
@@ -205,7 +186,7 @@ fatalities <-leaflet()  %>%
   addAwesomeMarkers(data = fatalities_cyc, group = "Pedal cyclists", label = ~road_user, icon = iconscycf, clusterOptions = markerClusterOptions(freezeAtZoom = 15)) %>% 
   addAwesomeMarkers(data = fatalities_moto, group = "Motorcyclists", label = ~road_user, icon = iconsmotof, clusterOptions = markerClusterOptions(freezeAtZoom = 15)) %>% 
   addAwesomeMarkers(data = fatalities_car, group = "Cars and taxis", label = ~road_user, icon = iconscarf, clusterOptions = markerClusterOptions(freezeAtZoom = 15)) %>% 
-  addAwesomeMarkers(data = fatalities_bus, group = "Bus, Coach, Minibus", label = ~road_user, icon = iconsbusf) %>% 
+  #addAwesomeMarkers(data = fatalities_bus, group = "Bus, Coach, Minibus", label = ~road_user, icon = iconsbusf) %>% 
   addAwesomeMarkers(data = fatalities_lor, group = "LGV and HGV", label = ~road_user, icon = iconslorf, clusterOptions = markerClusterOptions(freezeAtZoom = 15)) %>% 
   addAwesomeMarkers(data = fatalities_other, group = "Other", label = ~road_user, icon = iconsotherf,clusterOptions = markerClusterOptions(freezeAtZoom = 15)) %>% 
   addTopoJSON(geojson) %>%
