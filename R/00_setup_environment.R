@@ -30,6 +30,6 @@ library(jsonlite)
 
 #### UPDATE THIS SECTION ####
 
-mapyear <- 2022
+mapyear <- 2023
 
 ### END OF SCRIPT ###

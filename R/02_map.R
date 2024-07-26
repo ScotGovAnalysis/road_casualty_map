@@ -186,7 +186,7 @@ fatalities <-leaflet()  %>%
   addAwesomeMarkers(data = fatalities_cyc, group = "Pedal cyclists", label = ~road_user, icon = iconscycf, clusterOptions = markerClusterOptions(freezeAtZoom = 15)) %>% 
   addAwesomeMarkers(data = fatalities_moto, group = "Motorcyclists", label = ~road_user, icon = iconsmotof, clusterOptions = markerClusterOptions(freezeAtZoom = 15)) %>% 
   addAwesomeMarkers(data = fatalities_car, group = "Cars and taxis", label = ~road_user, icon = iconscarf, clusterOptions = markerClusterOptions(freezeAtZoom = 15)) %>% 
-  #addAwesomeMarkers(data = fatalities_bus, group = "Bus, Coach, Minibus", label = ~road_user, icon = iconsbusf) %>% 
+  addAwesomeMarkers(data = fatalities_bus, group = "Bus, Coach, Minibus", label = ~road_user, icon = iconsbusf) %>% # this line was edited out before
   addAwesomeMarkers(data = fatalities_lor, group = "LGV and HGV", label = ~road_user, icon = iconslorf, clusterOptions = markerClusterOptions(freezeAtZoom = 15)) %>% 
   addAwesomeMarkers(data = fatalities_other, group = "Other", label = ~road_user, icon = iconsotherf,clusterOptions = markerClusterOptions(freezeAtZoom = 15)) %>% 
   addTopoJSON(geojson) %>%
@@ -208,9 +208,6 @@ fatalities <-leaflet()  %>%
                     "Cars and taxis", "Bus, Coach, Minibus", "LGV and HGV", 
                     "Other"),
   options = layersControlOptions(collapsed = FALSE)) 
-
-
-
 
 
 
