@@ -4,4 +4,4 @@ Road casualties map showing the location of Scotland's road fatalities and serio
 https://www.transport.gov.scot/publication/key-reported-road-casualties-scotland-2022/
 
 Link to the map:
-https://datasciencescotland.github.io/road_casualty_map/R/Casualty_map.html
+https://scotgovanalysis.github.io/road_casualty_map/R/Casualty_map.html
