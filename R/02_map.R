@@ -53,142 +53,151 @@ getColor <- function(casualty) {
 
 # adding icons to different mode of users
 
-iconsped <- awesomeIcons(
+iconsped <- makeAwesomeIcon(
   icon = "ion-android-walk",
   iconColor = 'black',
   library = 'ion',
   markerColor = getColor(ped)
 )
 
-iconscyc <- awesomeIcons(
+iconscyc <- makeAwesomeIcon(
   icon = "fa-bicycle",
   iconColor = 'black',
   library = 'fa',
   markerColor = getColor(cyc)
 )
 
-iconsmoto <- awesomeIcons(
+iconsmoto <- makeAwesomeIcon(
   icon = 'fa-motorcycle',
   iconColor = 'black',
   library = 'fa',
   markerColor = getColor(moto)
 )
 
-iconscar <- awesomeIcons(
+iconscar <- makeAwesomeIcon(
   icon = 'fa-solid fa-car',
   iconColor = 'black',
   library = 'fa',
   markerColor = getColor(car)
 )
 
-iconsbus <- awesomeIcons(
+iconsbus <- makeAwesomeIcon(
   icon = "fa-sharp fa-solid fa-bus",
   iconColor = 'black',
   library = 'fa',
   markerColor = getColor(bus)
 )
 
-iconslor <- awesomeIcons(
+iconslor <- makeAwesomeIcon(
   icon = 'fa-solid fa-truck',
   iconColor = 'black',
   library = 'fa',
   markerColor = getColor(lor)
 )
 
-iconsother <- awesomeIcons(
+iconsother <- makeAwesomeIcon(
   icon = "",
   iconColor = 'black',
   library = 'fa',
   markerColor = getColor(other)
 )
 
-#creating leaflet map
+# the names (pedestrian, cyclist in this example) must be the exact values found in the column
+custom_icons <- awesomeIconList('Pedestrians' = iconsped, 
+                                "Pedal cyclists" = iconscyc,
+                                "Motorcyclists" = iconsmoto,
+                                "Cars and taxis" = iconscar,
+                                "Bus, Coach, Minibus" = iconsbus,
+                                "LGV and HGV" = iconslor,
+                                "Other" = iconsother)
 
-roaduser <- leaflet()  %>% 
-  addTiles() %>% 
-  addAwesomeMarkers(data = ped, group = "Pedestrians", label = ~severity, icon = iconsped, clusterOptions = markerClusterOptions(freezeAtZoom = 15)) %>% 
-  addAwesomeMarkers(data = cyc, group = "Pedal cyclists", label = ~severity, icon = iconscyc, clusterOptions = markerClusterOptions(freezeAtZoom = 15)) %>% 
-  addAwesomeMarkers(data = moto, group = "Motorcyclists", label = ~severity, icon = iconsmoto, clusterOptions = markerClusterOptions(freezeAtZoom = 15)) %>% 
-  addAwesomeMarkers(data = car, group = "Cars and taxis", label = ~severity, icon = iconscar, clusterOptions = markerClusterOptions(freezeAtZoom = 15)) %>% 
-  addAwesomeMarkers(data = bus, group = "Bus, Coach, Minibus", label = ~severity, icon = iconsbus, clusterOptions = markerClusterOptions(freezeAtZoom = 15)) %>% 
-  addAwesomeMarkers(data = lor, group = "LGV and HGV", label = ~severity, icon = iconslor, clusterOptions = markerClusterOptions(freezeAtZoom = 15)) %>% 
-  addAwesomeMarkers(data = other, group = "Other", label = ~severity, icon = iconsother, clusterOptions = markerClusterOptions(freezeAtZoom = 15)) %>% 
-  # Layers control
+
+leaflet(casualties_categories) %>%
+  addTiles() %>%
+  addAwesomeMarkers(
+    label = ~road_user,
+    icon = ~ custom_icons[road_user], # the column name
+    clusterOptions = markerClusterOptions()
+    ) %>% 
   addLayersControl(
-  overlayGroups = c("Pedestrians", "Pedal cyclists", "Motorcyclists", 
-                    "Cars and taxis", "Bus, Coach, Minibus", "LGV and HGV", 
-                    "Other"),
-  options = layersControlOptions(collapsed = FALSE)) %>% 
+    overlayGroups = c("Pedestrians", "Pedal cyclists", "Motorcyclists", 
+                      "Cars and taxis", "Bus, Coach, Minibus", "LGV and HGV", 
+                      "Other"),
+    options = layersControlOptions(collapsed = FALSE)) %>% 
   hideGroup(c("Pedal cyclists", "Motorcyclists", 
-            "Cars and taxis", "Bus, Coach, Minibus", "LGV and HGV", 
-            "Other"))
+              "Cars and taxis", "Bus, Coach, Minibus", "LGV and HGV", 
+              "Other"))
 
-
-
+    
 ## fatalities only map
 
 # adding icons to different mode of users
 
-iconspedf <- awesomeIcons(
+iconspedf <- makeAwesomeIcon(
   icon = "ion-android-walk",
   iconColor = 'black',
   library = 'ion',
   markerColor = "red"
 )
 
-iconscycf <- awesomeIcons(
+iconscycf <- makeAwesomeIcon(
   icon = "fa-bicycle",
   iconColor = 'black',
   library = 'fa',
   markerColor = "red"
 )
 
-iconsmotof <- awesomeIcons(
+iconsmotof <- makeAwesomeIcon(
   icon = 'fa-motorcycle',
   iconColor = 'black',
   library = 'fa',
   markerColor = "red"
 )
 
-iconscarf <- awesomeIcons(
+iconscarf <- makeAwesomeIcon(
   icon = 'fa-solid fa-car',
   iconColor = 'black',
   library = 'fa',
   markerColor = "red"
 )
 
-iconsbusf <- awesomeIcons(
+iconsbusf <- makeAwesomeIcon(
   icon = "fa-sharp fa-solid fa-bus",
   iconColor = 'black',
   library = 'fa',
   markerColor = "red"
 )
 
-iconslorf <- awesomeIcons(
+iconslorf <- makeAwesomeIcon(
   icon = 'fa-solid fa-truck',
   iconColor = 'black',
   library = 'fa',
   markerColor = "red"
 )
 
-iconsotherf <- awesomeIcons(
+iconsotherf <- makeAwesomeIcon(
   icon = "",
   iconColor = 'black',
   library = 'fa',
   markerColor = "red"
 )
 
-#creating leaflet map
+# the names (pedestrian, cyclist in this example) must be the exact values found in the column
+custom_icons <- awesomeIconList('Pedestrians' = iconspedf, 
+                                "Pedal cyclists" = iconscycf,
+                                "Motorcyclists" = iconsmotof,
+                                "Cars and taxis" = iconscarf,
+                                "Bus, Coach, Minibus" = iconsbusf,
+                                "LGV and HGV" = iconslorf,
+                                "Other" = iconsotherf)
 
-fatalities <-leaflet()  %>% 
-  addTiles() %>% 
-  addAwesomeMarkers(data = fatalities_ped, group = "Pedestrians", label = ~road_user, icon = iconspedf, clusterOptions = markerClusterOptions(freezeAtZoom = 15)) %>% 
-  addAwesomeMarkers(data = fatalities_cyc, group = "Pedal cyclists", label = ~road_user, icon = iconscycf, clusterOptions = markerClusterOptions(freezeAtZoom = 15)) %>% 
-  addAwesomeMarkers(data = fatalities_moto, group = "Motorcyclists", label = ~road_user, icon = iconsmotof, clusterOptions = markerClusterOptions(freezeAtZoom = 15)) %>% 
-  addAwesomeMarkers(data = fatalities_car, group = "Cars and taxis", label = ~road_user, icon = iconscarf, clusterOptions = markerClusterOptions(freezeAtZoom = 15)) %>% 
-  addAwesomeMarkers(data = fatalities_bus, group = "Bus, Coach, Minibus", label = ~road_user, icon = iconsbusf) %>% # this line was edited out before
-  addAwesomeMarkers(data = fatalities_lor, group = "LGV and HGV", label = ~road_user, icon = iconslorf, clusterOptions = markerClusterOptions(freezeAtZoom = 15)) %>% 
-  addAwesomeMarkers(data = fatalities_other, group = "Other", label = ~road_user, icon = iconsotherf,clusterOptions = markerClusterOptions(freezeAtZoom = 15)) %>% 
+leaflet(casualties_categories) %>%
+  addTiles() %>%
+  addAwesomeMarkers(
+    label = ~road_user,
+    icon = ~ custom_icons[road_user], # the column name
+    clusterOptions = markerClusterOptions()
+  ) %>% 
   addTopoJSON(geojson) %>%
   addLabelOnlyMarkers(
     data = la_xy,
@@ -201,13 +210,10 @@ fatalities <-leaflet()  %>%
       style = list(
         "color" = "#1E22AA",
         "font-size" = "16px"
-    ))) %>%
-# Layers control
+      ))) %>%
+  # Layers control
   addLayersControl(
-  overlayGroups = c("Pedestrians", "Pedal cyclists", "Motorcyclists", 
-                    "Cars and taxis", "Bus, Coach, Minibus", "LGV and HGV", 
-                    "Other"),
-  options = layersControlOptions(collapsed = FALSE)) 
-
-
-
+    overlayGroups = c("Pedestrians", "Pedal cyclists", "Motorcyclists", 
+                      "Cars and taxis", "Bus, Coach, Minibus", "LGV and HGV", 
+                      "Other"),
+    options = layersControlOptions(collapsed = FALSE)) 

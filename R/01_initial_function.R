@@ -40,6 +40,20 @@ casualties <- snapcasacc %>%
          longitude = convert_coordinates(EAST, NORTH, "long")) %>%
   ungroup()
 
+casualties_categories <- casualties %>%
+  mutate(road_user = case_when(
+    road_user == 'Pedestrian' ~ 'Pedestrians',
+    road_user == 'Pedal cycle' ~ 'Pedal cyclists',
+    road_user == 'Motorcycle' ~ 'Motorcyclists',
+    road_user == 'Car' ~ 'Cars and taxis',
+    road_user == 'Taxi' ~ 'Cars and taxis',
+    road_user == 'Minibus' ~ 'Bus, Coach, Minibus',
+    road_user == 'Bus/coach' ~ 'Bus, Coach, Minibus',
+    road_user == 'LGV' ~ 'LGV and HGV',
+    road_user == 'HGV' ~ 'LGV and HGV',
+    road_user == 'Other' ~ 'Other'
+  ))
+
 #select for all the different groups for easier manipulation for leaflet
 
 fatals <- casualties %>% 
