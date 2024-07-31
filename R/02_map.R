@@ -112,13 +112,13 @@ custom_icons <- awesomeIconList('Pedestrians' = iconsped,
                                 "Other" = iconsother)
 
 
-leaflet(casualties_categories) %>%
+roaduser <- leaflet(casualties_categories) %>%
   addTiles() %>%
   addAwesomeMarkers(
     label = ~road_user,
     icon = ~ custom_icons[road_user], # the column name
     clusterOptions = markerClusterOptions()
-    ) %>% 
+  ) %>% 
   addLayersControl(
     overlayGroups = c("Pedestrians", "Pedal cyclists", "Motorcyclists", 
                       "Cars and taxis", "Bus, Coach, Minibus", "LGV and HGV", 
@@ -191,7 +191,7 @@ custom_icons <- awesomeIconList('Pedestrians' = iconspedf,
                                 "LGV and HGV" = iconslorf,
                                 "Other" = iconsotherf)
 
-leaflet(casualties_categories) %>%
+fatalities <- leaflet(casualties_categories) %>%
   addTiles() %>%
   addAwesomeMarkers(
     label = ~road_user,
