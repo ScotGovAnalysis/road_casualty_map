@@ -5,3 +5,6 @@ https://www.transport.gov.scot/publication/key-reported-road-casualties-scotland
 
 Link to the map:
 https://scotgovanalysis.github.io/road_casualty_map/R/Casualty_map.html
+
+Uses JavaScript from the [Leaflet.FeatureGroup.SubGroup](https://github.com/ghybs/Leaflet.FeatureGroup.SubGroup?tab=readme-ov-file) plugin to allow layer control with clusters across
+categories.

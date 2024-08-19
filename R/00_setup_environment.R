@@ -25,6 +25,8 @@ library(leaflet)
 library(rgdal)  
 library(geojsonio)
 library(jsonlite)
+library(htmltools)
+library(htmlwidgets)
 
 ### 3 - Define dates ----
 
