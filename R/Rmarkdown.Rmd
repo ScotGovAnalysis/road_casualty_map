@@ -27,12 +27,12 @@ source(here("R", "02_map.R"))
 `r mapyear` fatalities
 =======================================================================
 ```{r}
-fatalities
+fatalities_1
 ```
 
 `r mapyear` fatalities and serious injuries 
 =======================================================================
 
 ```{r}
-roaduser
+roaduser_1
 ```

@@ -15,111 +15,139 @@ snapcasacc <- merge(snapcastem, snapacctem, by.x = "ACCREF", by.y = "ACCREF", al
 #filter casualties based on year selected, convert coordinates to long/lat
 
 casualties <- snapcasacc %>%  
-  filter (YEAR.x == mapyear) %>% 
-  select(CASAGE, Council, EAST, NORTH, RUSER, CASSEV) %>% 
-  mutate(road_user=case_when(
-    RUSER == 1 ~ 'Pedestrian',
-    RUSER == 2 ~ 'Pedal cycle',
-    RUSER == 3 ~ 'Motorcycle',
-    RUSER == 4 ~ 'Car',
-    RUSER == 5 ~ 'Taxi',
-    RUSER == 6 ~ 'Minibus',
-    RUSER == 7 ~ 'Bus/coach',
-    RUSER == 8 ~ 'LGV',
-    RUSER == 9 ~ 'HGV',
-    RUSER == 10 ~'Other',
+  select(YEAR.x, CASAGE, Council, EAST, NORTH, RUSER, CASSEV) %>% 
+  mutate(road_user = case_when(
+    RUSER == 1 ~ 'Pedestrians',
+    RUSER == 2 ~ 'Pedal cyclists',
+    RUSER == 3 ~ 'Motorcyclists',
+    RUSER == 4 ~ 'Cars and taxis',
+    RUSER == 5 ~ 'Cars and taxis',
+    RUSER == 6 ~ 'Bus, Coach, Minibus',
+    RUSER == 7 ~ 'Bus, Coach, Minibus',
+    RUSER == 8 ~ 'LGV and HGV',
+    RUSER == 9 ~ 'LGV and HGV',
+    RUSER == 10 ~ 'Other'
   )) %>% 
   mutate(severity=case_when(
     CASSEV == 1 ~ 'Fatal',
     CASSEV == 2 ~ 'Serious injury',
     CASSEV == 3 ~ 'Slight injury'
-    
   )) %>% 
   rowwise() %>%
   mutate(latitude = convert_coordinates(EAST, NORTH, "lat"),
          longitude = convert_coordinates(EAST, NORTH, "long")) %>%
   ungroup()
 
-casualties_categories <- casualties %>%
-  mutate(road_user = case_when(
-    road_user == 'Pedestrian' ~ 'Pedestrians',
-    road_user == 'Pedal cycle' ~ 'Pedal cyclists',
-    road_user == 'Motorcycle' ~ 'Motorcyclists',
-    road_user == 'Car' ~ 'Cars and taxis',
-    road_user == 'Taxi' ~ 'Cars and taxis',
-    road_user == 'Minibus' ~ 'Bus, Coach, Minibus',
-    road_user == 'Bus/coach' ~ 'Bus, Coach, Minibus',
-    road_user == 'LGV' ~ 'LGV and HGV',
-    road_user == 'HGV' ~ 'LGV and HGV',
-    road_user == 'Other' ~ 'Other'
-  ))
+casualties_fatal_1 <- casualties %>%
+  filter(CASSEV == 1, YEAR.x == mapyear)
 
-#select for all the different groups for easier manipulation for leaflet
+casualties_fatal_serious_1 <- casualties %>%
+  filter(CASSEV %in% c(1,2), YEAR.x == mapyear) 
 
-fatals <- casualties %>% 
-  filter(CASSEV == 1)
+casualties_fatal_2 <- casualties %>%
+  filter(CASSEV == 1, YEAR.x == mapyear-1)
 
-fatalities_ped <- casualties %>% 
-  filter(CASSEV == 1 & RUSER == 1)
+casualties_fatal_serious_2 <- casualties %>%
+  filter(CASSEV %in% c(1,2), YEAR.x == mapyear-1) 
 
-serious_ped <- casualties %>% 
-  filter(CASSEV == 2 & RUSER == 1)
+casualties_fatal_3 <- casualties %>%
+  filter(CASSEV == 1, YEAR.x == mapyear-2)
 
-fatalities_cyc <- casualties %>% 
-  filter(CASSEV == 1 & RUSER == 2)
+casualties_fatal_serious_3 <- casualties %>%
+  filter(CASSEV %in% c(1,2), YEAR.x == mapyear-2) 
 
-serious_cyc <- casualties %>% 
-  filter(CASSEV == 2 & RUSER == 2)
+casualties_fatal_4 <- casualties %>%
+  filter(CASSEV == 1, YEAR.x == mapyear-3)
 
-fatalities_moto <- casualties %>% 
-  filter(CASSEV == 1 & RUSER == 3)
+casualties_fatal_serious_4 <- casualties %>%
+  filter(CASSEV %in% c(1,2), YEAR.x == mapyear-3) 
 
-serious_moto <- casualties %>% 
-  filter(CASSEV == 2 & RUSER == 3)
+casualties_fatal_5 <- casualties %>%
+  filter(CASSEV == 1, YEAR.x == mapyear-4)
 
-fatalities_car <- casualties %>% 
-  filter(CASSEV == 1 & (RUSER == 4 | RUSER == 5) )
+casualties_fatal_serious_5 <- casualties %>%
+  filter(CASSEV %in% c(1,2), YEAR.x == mapyear-4) 
 
-serious_car <- casualties %>% 
-  filter(CASSEV == 2 & (RUSER == 4 | RUSER == 5) )
+# casualties_categories <- casualties %>%
+#   mutate(road_user = case_when(
+#     road_user == 'Pedestrian' ~ 'Pedestrians',
+#     road_user == 'Pedal cycle' ~ 'Pedal cyclists',
+#     road_user == 'Motorcycle' ~ 'Motorcyclists',
+#     road_user == 'Car' ~ 'Cars and taxis',
+#     road_user == 'Taxi' ~ 'Cars and taxis',
+#     road_user == 'Minibus' ~ 'Bus, Coach, Minibus',
+#     road_user == 'Bus/coach' ~ 'Bus, Coach, Minibus',
+#     road_user == 'LGV' ~ 'LGV and HGV',
+#     road_user == 'HGV' ~ 'LGV and HGV',
+#     road_user == 'Other' ~ 'Other'
+#   ))
 
-fatalities_bus <- casualties %>% 
-  filter(CASSEV == 1 & (RUSER == 6 | RUSER == 7) )
-
-serious_bus <- casualties %>% 
-  filter(CASSEV == 2 & (RUSER == 6 | RUSER == 7) )
-
-fatalities_lor <- casualties %>% 
-  filter(CASSEV == 1 & (RUSER == 8 | RUSER == 9) )
-
-serious_lor <- casualties %>% 
-  filter(CASSEV == 2 & (RUSER == 8 | RUSER == 9) )
-
-fatalities_other <- casualties %>% 
-  filter(CASSEV == 1 & RUSER == 10)
-
-serious_other <- casualties %>% 
-  filter(CASSEV == 2 & RUSER == 10)
-
-ped <- casualties %>% 
-  filter((CASSEV == 1 | CASSEV == 2)  & RUSER == 1)
-
-cyc <- casualties %>% 
-  filter((CASSEV == 1 | CASSEV == 2)  & RUSER == 2)
-
-moto <- casualties %>% 
-  filter((CASSEV == 1 | CASSEV == 2)  & RUSER == 3)
-
-car <- casualties %>% 
-  filter((CASSEV == 1 | CASSEV == 2)  & (RUSER == 4 | RUSER == 5))
-
-bus <- casualties %>% 
-  filter((CASSEV == 1 | CASSEV == 2)  & (RUSER == 6 | RUSER == 7))
-
-lor <- casualties %>% 
-  filter((CASSEV == 1 | CASSEV == 2)  & (RUSER == 8 | RUSER == 9))
-
-other <- casualties %>% 
-  filter((CASSEV == 1 | CASSEV == 2)  & RUSER == 10)
+##select for all the different groups for easier manipulation for leaflet
+#
+# fatals <- casualties %>% 
+#   filter(CASSEV == 1)
+# 
+# fatalities_ped <- casualties %>% 
+#   filter(CASSEV == 1 & RUSER == 1)
+# 
+# serious_ped <- casualties %>% 
+#   filter(CASSEV == 2 & RUSER == 1)
+# 
+# fatalities_cyc <- casualties %>% 
+#   filter(CASSEV == 1 & RUSER == 2)
+# 
+# serious_cyc <- casualties %>% 
+#   filter(CASSEV == 2 & RUSER == 2)
+# 
+# fatalities_moto <- casualties %>% 
+#   filter(CASSEV == 1 & RUSER == 3)
+# 
+# serious_moto <- casualties %>% 
+#   filter(CASSEV == 2 & RUSER == 3)
+# 
+# fatalities_car <- casualties %>% 
+#   filter(CASSEV == 1 & (RUSER == 4 | RUSER == 5) )
+# 
+# serious_car <- casualties %>% 
+#   filter(CASSEV == 2 & (RUSER == 4 | RUSER == 5) )
+# 
+# fatalities_bus <- casualties %>% 
+#   filter(CASSEV == 1 & (RUSER == 6 | RUSER == 7) )
+# 
+# serious_bus <- casualties %>% 
+#   filter(CASSEV == 2 & (RUSER == 6 | RUSER == 7) )
+# 
+# fatalities_lor <- casualties %>% 
+#   filter(CASSEV == 1 & (RUSER == 8 | RUSER == 9) )
+# 
+# serious_lor <- casualties %>% 
+#   filter(CASSEV == 2 & (RUSER == 8 | RUSER == 9) )
+# 
+# fatalities_other <- casualties %>% 
+#   filter(CASSEV == 1 & RUSER == 10)
+# 
+# serious_other <- casualties %>% 
+#   filter(CASSEV == 2 & RUSER == 10)
+# 
+# ped <- casualties %>% 
+#   filter((CASSEV == 1 | CASSEV == 2)  & RUSER == 1)
+# 
+# cyc <- casualties %>% 
+#   filter((CASSEV == 1 | CASSEV == 2)  & RUSER == 2)
+# 
+# moto <- casualties %>% 
+#   filter((CASSEV == 1 | CASSEV == 2)  & RUSER == 3)
+# 
+# car <- casualties %>% 
+#   filter((CASSEV == 1 | CASSEV == 2)  & (RUSER == 4 | RUSER == 5))
+# 
+# bus <- casualties %>% 
+#   filter((CASSEV == 1 | CASSEV == 2)  & (RUSER == 6 | RUSER == 7))
+# 
+# lor <- casualties %>% 
+#   filter((CASSEV == 1 | CASSEV == 2)  & (RUSER == 8 | RUSER == 9))
+# 
+# other <- casualties %>% 
+#   filter((CASSEV == 1 | CASSEV == 2)  & RUSER == 10)
 
 

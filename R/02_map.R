@@ -123,18 +123,41 @@ js_file <- here("javascript", "createMap.js")
 #                                 "Other" = iconsother)
 
 
-roaduser <- leaflet() %>%
-  addTiles() %>%
-  fitBounds(min(casualties_categories$longitude), 
-            min(casualties_categories$latitude), 
-            max(casualties_categories$longitude), 
-            max(casualties_categories$latitude)) %>% 
-  registerPlugin(clusterPlugin) %>% 
-  registerPlugin(awesomePlugin) %>% 
-  registerPlugin(subgroupPlugin) %>% 
-  # This is using the JavaScript code for the marker icons, clusters,
-  # and layer control
-  onRender(readLines(js_file, warn = FALSE), data = casualties_categories)
+# roaduser <- leaflet() %>%
+#   addTiles() %>%
+#   fitBounds(min(casualties_fatal_serious$longitude), 
+#             min(casualties_fatal_serious$latitude), 
+#             max(casualties_fatal_serious$longitude), 
+#             max(casualties_fatal_serious$latitude)) %>% 
+#   registerPlugin(clusterPlugin) %>% 
+#   registerPlugin(awesomePlugin) %>% 
+#   registerPlugin(subgroupPlugin) %>% 
+#   # This is using the JavaScript code for the marker icons, clusters,
+#   # and layer control
+#   onRender(readLines(js_file, warn = FALSE), data = casualties_fatal_serious)
+
+create_roaduser_map <- function(data) {
+  leaflet() %>%
+    addTiles() %>%
+    fitBounds(
+      min(data$longitude), 
+      min(data$latitude), 
+      max(data$longitude), 
+      max(data$latitude)
+    ) %>%
+    registerPlugin(clusterPlugin) %>%
+    registerPlugin(awesomePlugin) %>%
+    registerPlugin(subgroupPlugin) %>%
+    # This is using the JavaScript code for the marker icons, clusters,
+    # and layer control
+    onRender(readLines(js_file, warn = FALSE), data = data)
+}
+
+roaduser_1 <- create_roaduser_map(casualties_fatal_serious_1)
+roaduser_2 <- create_roaduser_map(casualties_fatal_serious_2)
+roaduser_3 <- create_roaduser_map(casualties_fatal_serious_3)
+roaduser_4 <- create_roaduser_map(casualties_fatal_serious_4)
+roaduser_5 <- create_roaduser_map(casualties_fatal_serious_5)
   
   # addAwesomeMarkers(
   #   label = ~road_user,
@@ -213,30 +236,60 @@ roaduser <- leaflet() %>%
 #                                 "LGV and HGV" = iconslorf,
 #                                 "Other" = iconsotherf)
 
-fatalities <- leaflet() %>%
-  addTiles() %>%
-  registerPlugin(clusterPlugin) %>% 
-  registerPlugin(awesomePlugin) %>% 
-  registerPlugin(subgroupPlugin) %>% 
-  # Using the JavaScript with this line:
-  onRender(readLines(js_file, warn = FALSE), data = casualties_categories) %>%
-  # Then can add other data back in R
-  addTopoJSON(geojson) %>%
-  addLabelOnlyMarkers(
-    data = la_xy,
-    lng = ~longitude,
-    lat = ~latitude,
-    label = ~la_name,
-    labelOptions = labelOptions(
-      noHide = TRUE,
-      textOnly = TRUE,
-      style = list(
-        "color" = "#1E22AA",
-        "font-size" = "16px"
-      ))) # %>%
+# fatalities <- leaflet() %>%
+#   addTiles() %>%
+#   registerPlugin(clusterPlugin) %>% 
+#   registerPlugin(awesomePlugin) %>% 
+#   registerPlugin(subgroupPlugin) %>% 
+#   # Using the JavaScript with this line:
+#   onRender(readLines(js_file, warn = FALSE), data = casualties_fatal) %>%
+#   # Then can add other data back in R
+#   addTopoJSON(geojson) %>%
+#   addLabelOnlyMarkers(
+#     data = la_xy,
+#     lng = ~longitude,
+#     lat = ~latitude,
+#     label = ~la_name,
+#     labelOptions = labelOptions(
+#       noHide = TRUE,
+#       textOnly = TRUE,
+#       style = list(
+#         "color" = "#1E22AA",
+#         "font-size" = "16px"
+#       ))) # %>%
   # Layers control
   # addLayersControl(
   #   overlayGroups = c("Pedestrians", "Pedal cyclists", "Motorcyclists", 
   #                     "Cars and taxis", "Bus, Coach, Minibus", "LGV and HGV", 
   #                     "Other"),
   #   options = layersControlOptions(collapsed = FALSE)) 
+
+create_fatalities_map <- function(data) {
+  leaflet() %>%
+    addTiles() %>%
+    registerPlugin(clusterPlugin) %>%
+    registerPlugin(awesomePlugin) %>%
+    registerPlugin(subgroupPlugin) %>%
+    onRender(readLines(js_file, warn = FALSE), data = data) %>%
+    addTopoJSON(geojson) %>%
+    addLabelOnlyMarkers(
+      data = la_xy,
+      lng = ~longitude,
+      lat = ~latitude,
+      label = ~la_name,
+      labelOptions = labelOptions(
+        noHide = TRUE,
+        textOnly = TRUE,
+        style = list(
+          "color" = "#1E22AA",
+          "font-size" = "16px"
+        )
+      )
+    )
+}
+
+fatalities_1 <- create_fatalities_map(casualties_fatal_1)
+fatalities_2 <- create_fatalities_map(casualties_fatal_2)
+fatalities_3 <- create_fatalities_map(casualties_fatal_3)
+fatalities_4 <- create_fatalities_map(casualties_fatal_4)
+fatalities_5 <- create_fatalities_map(casualties_fatal_5)
