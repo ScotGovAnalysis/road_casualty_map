@@ -13,8 +13,9 @@ snapcastem <- read.csv(here("data", "snapcastem.csv"))
 snapcasacc <- merge(snapcastem, snapacctem, by.x = "ACCREF", by.y = "ACCREF", all.x = TRUE)
 
 #filter casualties based on year selected, convert coordinates to long/lat
-casualties <- snapcasacc %>%  
-  select(YEAR.x, CASAGE, Council, EAST, NORTH, RUSER, CASSEV) %>% 
+casualties <- snapcasacc %>%
+  filter(YEAR.x %in% ((mapyear-4):mapyear), CASSEV %in% c(1,2)) %>% 
+  select(YEAR.x, CASAGE, Council, EAST, NORTH, RUSER, CASSEV) %>%
   mutate(road_user = case_when(
     RUSER == 1 ~ 'Pedestrians',
     RUSER == 2 ~ 'Pedal cyclists',
