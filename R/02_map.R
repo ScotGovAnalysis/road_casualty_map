@@ -71,7 +71,22 @@ create_roaduser_map <- function(data) {
     registerPlugin(subgroupPlugin) %>%
     # This is using the JavaScript code for the marker icons, clusters,
     # and layer control
-    onRender(readLines(js_file, warn = FALSE), data = data)
+    onRender(readLines(js_file, warn = FALSE), data = data) %>%
+    addTopoJSON(geojson) %>%
+    addLabelOnlyMarkers(
+      data = la_xy,
+      lng = ~longitude,
+      lat = ~latitude,
+      label = ~la_name,
+      labelOptions = labelOptions(
+        noHide = TRUE,
+        textOnly = TRUE,
+        style = list(
+          "color" = "#1E22AA",
+          "font-size" = "16px"
+        )
+      )
+    )
 }
 
 roaduser_1 <- create_roaduser_map(casualties_fatal_serious_1)
