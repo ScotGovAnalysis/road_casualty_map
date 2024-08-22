@@ -6,7 +6,7 @@ library(here)
 
 render(
   input = here("R","Rmarkdown1.Rmd"),
-  output_file = here ("R", "Casualty_map.html")
+  output_file = here ("R", "Casualty_map_2023.html")
 )
 
 render(
@@ -16,7 +16,7 @@ render(
 
 render(
   input = here("R","Rmarkdown3.Rmd"),
-  output_file = here ("R", "Casualty_map_2022.html")
+  output_file = here ("R", "Casualty_map_2021.html")
 )
 
 render(

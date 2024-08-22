@@ -1,5 +1,5 @@
 ---
-title: "Casualty map dashboard"
+title: "Casualty map dashboard 2023"
 output: 
   flexdashboard::flex_dashboard:
     theme:
