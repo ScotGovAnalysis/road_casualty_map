@@ -26,3 +26,4 @@ data/
 
 #custom files to ignore, includes file path
 R/exportSAS.R
+R/export-SAS-data.R

@@ -1,0 +1,38 @@
+---
+title: "Casualty map dashboard 2023"
+output: 
+  flexdashboard::flex_dashboard:
+    theme:
+      bg: "#101010"
+      fg: "#FDF7F7" 
+      primary: "#1E22AA"
+      base_font:
+        google: Prompt
+      code_font:
+        google: JetBrains Mono
+    orientation: columns
+    vertical_layout: fill
+    logo: favicon-32x32.png
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(here)
+source(here("R", "00_setup_environment.R"))
+source(here("R", "01_initial_function.R"))
+source(here("R", "02_map.R"))
+
+```
+
+`r mapyear` fatalities
+=======================================================================
+```{r}
+fatalities_1
+```
+
+`r mapyear` fatalities and serious injuries 
+=======================================================================
+
+```{r}
+roaduser_1
+```
